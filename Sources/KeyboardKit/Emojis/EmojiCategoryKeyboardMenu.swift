@@ -65,7 +65,7 @@ public struct EmojiCategoryKeyboardMenu: View {
             Spacer()
             buttonList.font(style.categoryFont)
             Spacer()
-            backspaceButton.font(style.systemFont)
+            backspaceButton.font(style.backspaceFont)
             Spacer()
         }
     }

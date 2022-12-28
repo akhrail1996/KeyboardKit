@@ -50,6 +50,7 @@ public struct EmojiKeyboardStyle {
         verticalCategoryStackSpacing: CGFloat = 0,
         categoryFont: Font = .system(size: 14),
         systemFont: Font = .system(size: 16),
+        backspaceFont: Font = .system(size: 20),
         selectedCategoryColor: Color = .primary.opacity(0.1),
         abcText: String = "ABC",
         backspaceIcon: Image = .keyboardBackspace
@@ -58,6 +59,7 @@ public struct EmojiKeyboardStyle {
         self.itemFont = itemFont
         self.categoryFont = categoryFont
         self.systemFont = systemFont
+        self.backspaceFont = backspaceFont
         self.rows = rows
         self.horizontalItemSpacing = horizontalItemSpacing
         self.verticalItemSpacing = verticalItemSpacing
@@ -113,6 +115,11 @@ public struct EmojiKeyboardStyle {
     public var systemFont: Font
     
     /**
+     The font to apply to backspace button.
+     */
+    public var backspaceFont: Font
+    
+    /**
      The total keyboard height.
      */
     public var totalHeight: CGFloat { CGFloat(rows) * itemSize }
@@ -144,7 +151,8 @@ public extension EmojiKeyboardStyle {
         verticalItemSpacing: 10,
         verticalCategoryStackSpacing: 10,
         categoryFont: .system(size: 18).bold(),
-        systemFont: .system(size: 18))
+        systemFont: .system(size: 18),
+        backspaceFont: .system(size: 22))
     
     /**
      The style to use for large iPads in portrait.
@@ -160,7 +168,8 @@ public extension EmojiKeyboardStyle {
         verticalItemSpacing: 7,
         verticalCategoryStackSpacing: 7,
         categoryFont: .system(size: 18).bold(),
-        systemFont: .system(size: 18))
+        systemFont: .system(size: 18),
+        backspaceFont: .system(size: 22))
     
     /**
      The style to use for standard iPads in landscape.
@@ -176,7 +185,8 @@ public extension EmojiKeyboardStyle {
         verticalItemSpacing: 10,
         verticalCategoryStackSpacing: 7,
         categoryFont: .system(size: 18).bold(),
-        systemFont: .system(size: 18))
+        systemFont: .system(size: 18),
+        backspaceFont: .system(size: 22))
     
     /**
      The style to use for standard iPads in landscape.
@@ -192,7 +202,8 @@ public extension EmojiKeyboardStyle {
         verticalItemSpacing: 10,
         verticalCategoryStackSpacing: 5,
         categoryFont: .system(size: 18).bold(),
-        systemFont: .system(size: 18))
+        systemFont: .system(size: 18),
+        backspaceFont: .system(size: 22))
     
     /**
      The style to use for iPhones in landscape.
