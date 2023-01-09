@@ -16,20 +16,22 @@ class StandardCalloutActionProviderTests: XCTestCase {
 
     override func setUp() {
         context = KeyboardContext()
-        provider = StandardCalloutActionProvider(context: context)
+        provider = StandardCalloutActionProvider(
+            keyboardContext: context
+        )
     }
 
     func testLocalizedProvidersHaveStandardProviders() {
-        let providers = provider.providerDictionary.dictionary
+        let providers = provider.localizedProviders.dictionary
         XCTAssertEqual(providers.keys.count, 1)
         XCTAssertTrue(providers[KeyboardLocale.english.id] is EnglishCalloutActionProvider)
     }
 
     func testLocalizedProvidersAcceptCustomProviders() {
         provider = StandardCalloutActionProvider(
-            context: context,
+            keyboardContext: context,
             providers: [StandardCalloutActionProvider.standardProvider])
-        let providers = provider.providerDictionary.dictionary
+        let providers = provider.localizedProviders.dictionary
         XCTAssertEqual(providers.keys.count, 1)
         XCTAssertTrue(providers[KeyboardLocale.english.id] is EnglishCalloutActionProvider)
     }

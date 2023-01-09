@@ -14,16 +14,18 @@ class KeyboardLocaleTests: XCTestCase {
     let locales = KeyboardLocale.allCases
 
     func testLocaleIdentifierIsValidForAllCases() {
-        XCTAssertEqual(KeyboardLocale.allCases.count, 55)
+        XCTAssertEqual(KeyboardLocale.allCases.count, 60)
 
         let map = locales.map { ($0, $0.locale.identifier) }
         let result = Dictionary(uniqueKeysWithValues: map)
         let expected: [KeyboardLocale: String] = [
             .albanian: "sq",
             .arabic: "ar",
+            .armenian: "hy",
             .belarusian: "be",
             .bulgarian: "bg",
             .catalan: "ca",
+            .cherokee: "chr",
             .croatian: "hr",
             .czech: "cs",
             .danish: "da",
@@ -48,6 +50,7 @@ class KeyboardLocaleTests: XCTestCase {
             .hebrew: "he_IL",
             .hungarian: "hu",
             .icelandic: "is",
+            .indonesian: "id",
             .irish: "ga_IE",
             .italian: "it",
             .kurdish_sorani: "ckb",
@@ -56,6 +59,7 @@ class KeyboardLocaleTests: XCTestCase {
             .latvian: "lv",
             .lithuanian: "lt",
             .macedonian: "mk",
+            .malay: "ms",
             .maltese: "mt",
             .mongolian: "mn",
             .norwegian: "nb",
@@ -73,7 +77,8 @@ class KeyboardLocaleTests: XCTestCase {
             .swahili: "sw",
             .swedish: "sv",
             .turkish: "tr",
-            .ukrainian: "uk"
+            .ukrainian: "uk",
+            .uzbek: "uz"
         ]
 
         XCTAssertEqual(result.keys, expected.keys)
@@ -100,10 +105,12 @@ class KeyboardLocaleTests: XCTestCase {
         let expected: [KeyboardLocale: String] = [
             .albanian: "shqip",
             .arabic: "العربية",
+            .armenian: "հայերեն",
             .belarusian: "беларуская",
             .bulgarian: "български",
             .dutch_belgium: "Nederlands (België)",
             .catalan: "català",
+            .cherokee: "ᏣᎳᎩ",
             .croatian: "hrvatski",
             .czech: "čeština",
             .danish: "dansk",
@@ -127,6 +134,7 @@ class KeyboardLocaleTests: XCTestCase {
             .hebrew: "עברית (ישראל)",
             .hungarian: "magyar",
             .icelandic: "íslenska",
+            .indonesian: "Indonesia",
             .irish: "Gaeilge (Éire)",
             .italian: "italiano",
             .kurdish_sorani: "کوردیی ناوەندی",
@@ -135,6 +143,7 @@ class KeyboardLocaleTests: XCTestCase {
             .latvian: "latviešu",
             .lithuanian: "lietuvių",
             .macedonian: "македонски",
+            .malay: "Bahasa Melayu",
             .maltese: "Malti",
             .mongolian: "монгол",
             .norwegian: "norsk bokmål",
@@ -152,7 +161,8 @@ class KeyboardLocaleTests: XCTestCase {
             .swahili: "Kiswahili",
             .swedish: "svenska",
             .turkish: "Türkçe",
-            .ukrainian: "українська"]
+            .ukrainian: "українська",
+            .uzbek: "o‘zbek"]
 
         XCTAssertEqual(result.keys, expected.keys)
         result.keys.forEach {
@@ -166,9 +176,11 @@ class KeyboardLocaleTests: XCTestCase {
         let expected: [KeyboardLocale: String] = [
             .albanian: "🇦🇱",
             .arabic: "🇦🇪",
+            .armenian: "🇦🇲",
             .belarusian: "🇧🇾",
             .bulgarian: "🇧🇬",
             .catalan: "🇦🇩",
+            .cherokee: "🏳️",
             .croatian: "🇭🇷",
             .czech: "🇨🇿",
             .danish: "🇩🇰",
@@ -193,6 +205,7 @@ class KeyboardLocaleTests: XCTestCase {
             .hebrew: "🇮🇱",
             .hungarian: "🇭🇺",
             .icelandic: "🇮🇸",
+            .indonesian: "🇮🇩",
             .irish: "🇮🇪",
             .italian: "🇮🇹",
             .kurdish_sorani: "🇹🇯",
@@ -201,6 +214,7 @@ class KeyboardLocaleTests: XCTestCase {
             .latvian: "🇱🇻",
             .lithuanian: "🇱🇹",
             .macedonian: "🇲🇰",
+            .malay: "🇲🇾",
             .maltese: "🇲🇹",
             .mongolian: "🇲🇳",
             .norwegian: "🇳🇴",
@@ -218,7 +232,8 @@ class KeyboardLocaleTests: XCTestCase {
             .swedish: "🇸🇪",
             .swahili: "🇰🇪",
             .turkish: "🇹🇷",
-            .ukrainian: "🇺🇦"
+            .ukrainian: "🇺🇦",
+            .uzbek: "🇺🇿"
         ]
 
         XCTAssertEqual(result.keys, expected.keys)

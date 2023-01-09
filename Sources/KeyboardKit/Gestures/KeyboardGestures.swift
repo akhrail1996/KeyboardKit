@@ -86,7 +86,7 @@ struct KeyboardGestures<Content: View>: View {
     var body: some View {
         view.overlay(
             GeometryReader { geo in
-                if shouldApplyNewGestures, #available(iOS 14.0, macOS 11.0, watchOS 8.0, *) {
+                if #available(iOS 14.0, macOS 11.0, watchOS 8.0, *) {
                     gestureButton(for: geo)
                 } else {
                     Color.clearInteractable
@@ -100,14 +100,17 @@ struct KeyboardGestures<Content: View>: View {
     }
 }
 
-private extension KeyboardGestures {
+private extension View {
 
-    var shouldApplyNewGestures: Bool {
-        if action?.isEmojiAction == true { return true }
-        return isNewGestureEngineEnabled
+    @ViewBuilder
+    func optionalGesture<GestureType: Gesture>(_ gesture: GestureType?) -> some View {
+        if let gesture = gesture {
+            self.gesture(gesture)
+        } else {
+            self
+        }
     }
 }
-
 
 // MARK: - Views
 
@@ -122,7 +125,6 @@ private extension KeyboardGestures {
                 pressAction: { handlePress(in: geo) },
                 releaseInsideAction: { handleReleaseInside(in: geo) },
                 releaseOutsideAction: { handleReleaseOutside(in: geo) },
-                longPressDelay: 0.5,
                 longPressAction: { handleLongPress(in: geo) },
                 doubleTapAction: { handleDoubleTap(in: geo) },
                 repeatAction: { handleRepeat(in: geo) },
@@ -136,7 +138,6 @@ private extension KeyboardGestures {
                 pressAction: { handlePress(in: geo) },
                 releaseInsideAction: { handleReleaseInside(in: geo) },
                 releaseOutsideAction: { handleReleaseOutside(in: geo) },
-                longPressDelay: 0.5,
                 longPressAction: { handleLongPress(in: geo) },
                 doubleTapAction: { handleDoubleTap(in: geo) },
                 repeatAction: { handleRepeat(in: geo) },
@@ -156,12 +157,6 @@ private extension KeyboardGestures {
     var actionCalloutContext: ActionCalloutContext? { .shared }
 
     var inputCalloutContext: InputCalloutContext? { .shared }
-
-    var featureToggle: FeatureToggle { .shared }
-
-    var isNewGestureEngineEnabled: Bool {
-        featureToggle.isFeatureEnabled(.newButtonGestureEngine)
-    }
 }
 
 

@@ -22,9 +22,11 @@ public extension KeyboardLayoutProvider where Self == PreviewKeyboardLayoutProvi
  */
 public class PreviewKeyboardLayoutProvider: KeyboardLayoutProvider {
     
-    public init(context: KeyboardContext = .preview) {
-        let inputProvider = StandardInputSetProvider(context: context)
-        provider = StandardKeyboardLayoutProvider(inputSetProvider: inputProvider)
+    public init(keyboardContext: KeyboardContext = .preview) {
+        let inputProvider = StandardInputSetProvider(keyboardContext: keyboardContext)
+        provider = StandardKeyboardLayoutProvider(
+            keyboardContext: .preview,
+            inputSetProvider: inputProvider)
     }
     
     private let provider: KeyboardLayoutProvider

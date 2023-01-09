@@ -36,24 +36,56 @@ struct KeyboardView: View {
 
     var body: some View {
         VStack {
-            Button("Read full document text") {
-                Task {
-                    let result = try await context
-                        .textDocumentProxy
-                        .fullDocumentContext()
-                        .fullDocumentContext
-                    updateText(result)
-                }
-            }
-            Text(text)
-                .frame(height: 250)
-        }.background(Color.random() )
-            .overlay(Text(context.keyboardType.id))
+            Button("Read full document text", action: readText)
+            ScrollView(.vertical) {
+                textView
+            }.frame(height: 250)
+        }.background(Color.random())
+    }
+}
+
+extension KeyboardView {
+
+    var textView: some View {
+        Text(text)
+            .frame(maxWidth: .infinity)
+    }
+}
+
+extension KeyboardView {
+
+    func readText() {
+        Task {
+            let result = try await context
+                .textDocumentProxy
+                .fullDocumentContext()
+            handleResult(result)
+        }
     }
 
     @MainActor
-    func updateText(_ newText: String) {
-        text = newText
+    func handleResult(_ result: FullDocumentContextResult) {
+        UIPasteboard.general.string = """
+---
+original context before:
+\(result.originalDocumentContextBeforeInput ?? "-")
+---
+original context after:
+\(result.originalDocumentContextAfterInput ?? "-")
+---
+original context:
+\(result.originalDocumentContext)
+---
+full context before:
+\(result.fullDocumentContextBeforeInput)
+---
+full context after:
+\(result.fullDocumentContextAfterInput)
+---
+full context: \(result.fullDocumentContext)
+---
+"""
+        text = result.fullDocumentContext
     }
 }
 

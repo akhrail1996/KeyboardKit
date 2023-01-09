@@ -19,7 +19,7 @@ public struct CalloutButtonArea: View {
      
      - Parameters:
        - frame: The button area frame.
-       - style: The style to use, by default `.standard`.
+       - style: The style to use, by default ``CalloutStyle/standard``.
      */
     public init(
         frame: CGRect,
@@ -55,7 +55,7 @@ private extension CalloutButtonArea {
     var buttonBody: some View {
         CustomRoundedRectangle(bottomLeft: cornerRadius, bottomRight: cornerRadius)
             .foregroundColor(backgroundColor)
-            .frame(size: frame.size)
+            .frame(width: frame.size.width, height: frame.size.height)
     }
     
     var calloutCurve: some View {

@@ -10,8 +10,9 @@
 
 "done" = "Fertig";
 "go" = "Öffnen";
+"join" = "join";
 "ok" = "OK";
-"return" = "↵";
+"return" = "⮐";
 "search" = "Suchen";
 "space" = "Leerzeichen";
 

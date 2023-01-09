@@ -63,7 +63,7 @@ open class iPadKeyboardLayoutProvider: SystemKeyboardLayoutProvider {
         if isBottomTrailingSwitcher(action, row: row, index: index) { return bottomTrailingSwitcherWidth(for: context) }
 
         switch action {
-        case dictationReplacement: return .input
+        case context.keyboardDictationReplacement: return .input
         case .backspace: return backspaceWidth(for: context)
         case .dismissKeyboard: return .inputPercentage(1.45)
         case .keyboardType: return row == 2 ? .available : .input
@@ -80,7 +80,7 @@ open class iPadKeyboardLayoutProvider: SystemKeyboardLayoutProvider {
      */
     open override func keyboardReturnAction(for context: KeyboardContext) -> KeyboardAction {
         let base = super.keyboardReturnAction(for: context)
-        return base == .return ? .newLine : base
+        return base == .primary(.return) ? .primary(.newLine) : base
     }
 
 
@@ -97,7 +97,7 @@ open class iPadKeyboardLayoutProvider: SystemKeyboardLayoutProvider {
         let needsDictation = context.needsInputModeSwitchKey
         if let action = keyboardSwitchActionForBottomRow(for: context) { result.append(action) }
         result.append(.nextKeyboard)
-        if needsDictation, let action = dictationReplacement { result.append(action) }
+        if needsDictation, let action = context.keyboardDictationReplacement { result.append(action) }
         result.append(.space)
         if context.isAlphabetic(.persian) { result.append(.character(.zeroWidthSpace)) }
         if let action = keyboardSwitchActionForBottomRow(for: context) { result.append(action) }
@@ -124,11 +124,11 @@ open class iPadKeyboardLayoutProvider: SystemKeyboardLayoutProvider {
     open func lowerTrailingActions(for context: KeyboardContext) -> KeyboardActions {
         guard let action = keyboardSwitchActionForBottomInputRow(for: context) else { return [] }
         if context.isAlphabetic(.arabic) { return [keyboardReturnAction(for: context)] }
-        if context.isAlphabetic(.hebrew) { return [.newLine] }
+        if context.isAlphabetic(.hebrew) { return [.primary(.newLine)] }
         if context.isAlphabetic(.kurdish_sorani_arabic) { return [keyboardReturnAction(for: context)] }
         if context.isAlphabetic(.kurdish_sorani_pc) { return [keyboardReturnAction(for: context)] }
         if context.isAlphabetic(.persian) { return [] }
-        if hasAlphabeticInputCount([12, 12, 10]) { return [.newLine] }  // e.g. Belarusian
+        if hasAlphabeticInputCount([12, 12, 10]) { return [.primary(.newLine)] }  // e.g. Belarusian
         return [action]
     }
 
@@ -221,14 +221,6 @@ private extension iPadKeyboardLayoutProvider {
         case .shift, .keyboardType: return row == 3 && index > 0
         default: return false
         }
-    }
-
-    func isPortrait(_ context: KeyboardContext) -> Bool {
-        #if os(iOS)
-        context.screenOrientation.isPortrait
-        #else
-        return false
-        #endif
     }
 
     func isMiddleLeadingSpacer(_ action: KeyboardAction, row: Int, index: Int) -> Bool {

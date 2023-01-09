@@ -11,7 +11,7 @@ import KeyboardKitPro
 
 /**
  This screen has a multi-line text field that can be used to
- try KeyboardKit with various keyboard appearance presets.
+ try KeyboardKit with various keyboard appearances.
  */
 struct EditScreen: View {
     
@@ -29,7 +29,7 @@ struct EditScreen: View {
                 MultilineTextField(text: $text, appearance: appearance)
                     .frame(height: 200)
                 EnabledListItem(
-                    isEnabled: isActive,
+                    isEnabled: keyboardState.isKeyboardCurrentlyActive,
                     enabledText: "Demo keyboard is selected",
                     disabledText: "Demo keyboard is not selected")
             }
@@ -38,10 +38,6 @@ struct EditScreen: View {
 }
 
 private extension EditScreen {
-    
-    var isActive: Bool {
-        keyboardState.isKeyboardCurrentlyActive
-    }
     
     var title: String {
         appearance == .dark ? "Dark text field" : "Regular text field"

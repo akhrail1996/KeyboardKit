@@ -11,48 +11,42 @@ import KeyboardKit
 
 /**
  This screen has a multi-line text field that can be used to
- try KeyboardKit with various keyboard appearance presets.
+ try KeyboardKit with various keyboard appearances.
  */
 struct EditScreen: View {
-    
-    let appearance: UIKeyboardAppearance
+
+    let appearance: ColorScheme
     
     @State
     private var text = ""
-    
+
+    @FocusState
+    private var isFocused: Bool
+
     @EnvironmentObject
     private var keyboardState: KeyboardEnabledState
     
     var body: some View {
         List {
             Section {
-                MultilineTextField(text: $text, appearance: appearance)
+                TextEditor(text: $text)
                     .frame(height: 200)
-                EnabledListItem(
-                    isEnabled: isActive,
+                    .focused($isFocused)
+                    .keyboardAppearance(appearance)
+                KeyboardEnabledLabel(
+                    isEnabled: keyboardState.isKeyboardActive,
                     enabledText: "Demo keyboard is selected",
                     disabledText: "Demo keyboard is not selected")
             }
         }
-        .listStyle(.insetGrouped)
-        .navigationTitle(title)
-    }
-}
-
-private extension EditScreen {
-    
-    var isActive: Bool {
-        keyboardState.isKeyboardCurrentlyActive
-    }
-    
-    var title: String {
-        appearance == .dark ? "Dark text field" : "Regular text field"
+        .onAppear { isFocused = true }
+        .navigationTitle(appearance.displayTitle)
     }
 }
 
 struct EditScreen_Previews: PreviewProvider {
 
     static var previews: some View {
-        EditScreen(appearance: .default)
+        EditScreen(appearance: .light)
     }
 }

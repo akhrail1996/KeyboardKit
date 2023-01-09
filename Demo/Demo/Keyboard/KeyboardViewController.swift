@@ -11,7 +11,7 @@ import SwiftUI
 
 /**
  This keyboard demonstrates how to create a keyboard that is
- using `SystemKeyboard` to mimic a native English keyboard.
+ using a `SystemKeyboard` to mimic a native English keyboard.
  
  The keyboard makes demo-specific configurations and sets up
  the keyboard with a ``KeyboardView``. You can change all of
@@ -19,12 +19,12 @@ import SwiftUI
  
  To use this keyboard, you must enable it in system settings
  ("Settings/General/Keyboards"). It needs full access to get
- access to features like haptic and audio feedback.
+ access to features like haptic feedback.
  
  Note that this demo adds KeyboardKit as a local package and
  not as a remote package, as you would normally add it. This
- is done to make it possible to change the package from this
- project and make it easier to quickly try out new things.
+ is done to make it possible to easily test and develop this
+ package while being in this project.
  */
 class KeyboardViewController: KeyboardInputViewController {
     
@@ -34,12 +34,13 @@ class KeyboardViewController: KeyboardInputViewController {
      */
     override func viewDidLoad() {
 
-        // Enable experimental features
-        // FeatureToggle.shared.toggleFeature(.newButtonGestureEngine, isOn: true)
-
         // Set a custom keyboard locale
         // 💡 Changing locale without KeyboardKit Pro or custom input sets will only change some button texts.
         keyboardContext.setLocale(.english)
+
+        // Set a custom dictation key replacement.
+        // 💡 This will replace the dictation button on keyboards that need it.
+        keyboardContext.keyboardDictationReplacement = .keyboardType(.emojis)
         
         // Setup a fake, demo-specific autocomplete provider.
         // 💡 You can change this provider to see how the autocomplete changes.
@@ -51,7 +52,8 @@ class KeyboardViewController: KeyboardInputViewController {
         
         // Setup a demo-specific keyboard appearance.
         // 💡 You can change this appearance to see how the keyboard style changes.
-        keyboardAppearance = DemoKeyboardAppearance(context: keyboardContext)
+        keyboardAppearance = DemoKeyboardAppearance(
+            keyboardContext: keyboardContext)
         
         // Setup a demo-specific keyboard action handler.
         // 💡 You can change this handler to see how the keyboard behavior changes.
@@ -61,8 +63,8 @@ class KeyboardViewController: KeyboardInputViewController {
         // Setup a demo-specific keyboard layout provider.
         // 💡 You can change this provider to see how the keyboard layout changes.
         keyboardLayoutProvider = DemoKeyboardLayoutProvider(
-            inputSetProvider: inputSetProvider,
-            dictationReplacement: nil)
+            keyboardContext: keyboardContext,
+            inputSetProvider: inputSetProvider)
         
         // Call super to perform the base initialization
         super.viewDidLoad()

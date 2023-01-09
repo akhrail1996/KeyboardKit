@@ -9,7 +9,7 @@
 import Foundation
 
 /**
- This typealias represents a `CalloutActionProvider` that is
- also implementing the `LocalizedService` protocol.
+ This typealias represents a ``CalloutActionProvider``, that
+ also implements the ``LocalizedService`` protocol.
  */
 public typealias LocalizedCalloutActionProvider = CalloutActionProvider & LocalizedService

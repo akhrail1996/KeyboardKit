@@ -15,8 +15,181 @@ Breaking changes can still occur in minor versions and patches, though, if the a
 
 Some things that are planned for the 7.0 release:
 
-* Removing the keyboard action `tap` gesture and only use `press` and `release`.
-* Rewriting the system keyboard gestures to support swipe to type and predictive type.
+* Deployment targets will be bumped to iOS 14, macOS 11, tvOS 14 and watchOS 8.
+* All TODOS will be addressed.
+* All deprecated code will be removed.
+* All shared instances should be removed.
+* All dependencies to the shared instances should be replaced with init parameters, even for the smallest view.
+* KeyboardAction should only support `press` and `release` and not `tap`.
+* KeyboardAction.GestureAction should use a protocol instead of a view controller.
+* KeyboardAppearance will convert parameterless functions to properties. 
+* KeyboardKit Pro active and enabled labels will use an observed object to update when the state changes.
+* StandardKeyboardActionHandler changeKeyboardTypeAction will be removed.
+* The ActionCallout initializer will require a KeyboardContext
+
+
+
+## 6.9
+
+This release starts preparing for the next major version, by deprecating and renaming a lot of things that will change in that version.
+
+Most of the changes only affect functionality that is mostly used internally, but you may have to rename some init and function parameters. 
+
+### ✨ New features
+
+* `DisabledAutocompleteProvider` is now `public`.
+* `DisabledCalloutActionProvider` is now `public`.
+* `InterfaceOrientation` is a new multi-platform version of `UIInterfaceOrientation`.
+* `KeyboardAppearance` has a new `keyboardEdgeInsets` property.
+* `KeyboardAppearanceViewModifier` is a new modifier for setting light and dark keyboards.
+* `KeyboardAction` has a new `isAlphabeticKeyboardTypeAction` property.
+* `KeyboardAction` has a new `isKeyboardTypeAction` function.
+* `KeyboardContext` has a new `screenSize` parameter.
+* `KeyboardContext` has a new `interfaceOrientation` parameter.
+* `KeyboardEnabledLabel` is a new view that can display keyboard states.
+* `KeyboardSettingsLink` is a new view that can link to System Settings.
+* `KeyboardTextView` has a new `hasFocus` binding.
+* `RepeatGestureTimer` init is now `public`.
+* `RepeatGestureTimer` time interval is now mutable.
+* `StandardCalloutActionProvider` `keyboardContext` is now `public`.
+* `StandardKeyboardAppearance` `keyboardContext` is now `public`.
+* `StandardKeyboardAppearance` `keyboardLayoutConfiguration` is now `open`.
+* `StandardKeyboardBehavior` `keyboardContext` is now `public`.
+* `StaticKeyboardBehavior` is now `open`.
+
+### 👑 KeyboardKit Pro
+
+* `StandardAutocompleteProvider` `autocompleteSuggestions` is now `open`.
+* `KeyboardActiveLabel` now uses a style and observes changes.
+* `KeyboardEnabledLabel` now uses a style and observes changes.
+
+### 💡 Behavior changes
+
+* `GestureButtonDefaults` long press delay is reduced to `0.5` seconds.
+* `iPhoneKeyboardLayoutProvider` now adds `.` to `Go` keyboards. 
+* `iPhoneKeyboardLayoutProvider` now adds `@` and `.` to e-mail keyboards. 
+* `KeyboardAction.primary` now applies autocomplete suggestions if it's a system action.
+* `KeyboardContext` controller-based initializer is marked as a convenience initializer.
+* `KeyboardGestures` now apply the `GestureButtonDefaults` long press delay.
+* `SystemKeyboard` no longer depends on `AnyView`.
+* `StandardKeyboardAppearance` now applies insets to system keyboards.
+* `StandardKeyboardAppearance` now applies larger font sizes to some system keyboards keys on iPad devices.
+* `SystemKeyboardSpaceButtonContent` no longer depends on `AnyView`.  
+
+### 🗑 Deprecations
+
+* `ActionCallout` now prefers a `keyboardContext` to be injected.
+* `ActionCallout` `context` is renamed to `calloutContext`.
+* `EmojiKeyboard` `context` is renamed to `keyboardContext`.
+* `EmojiCategoryKeyboard` `context` is renamed to `keyboardContext`.
+* `EmojiCategoryKeyboardMenu` `context` is renamed to `keyboardContext`.
+* `FeatureToggle.Feature.newButtonGestureEngine` is deprecated.
+* `InputCallout` `context` is renamed to `calloutContext`.
+* `LocaleContextMenu` `context` is renamed to `keyboardContext`.
+* `KeyboardAction.newLine` is replaced by `KeyboardAction.primary(.newLine)`.
+* `KeyboardAction.return` is replaced by `KeyboardAction.primary(.return)`.
+* `KeyboardAction.standardTapAction` is replaced by `KeyboardAction.standardReleaseAction`.
+* `KeyboardEnabledState` `isKeyboardCurrentlyActive` is renamed to `isKeyboardActive`.
+* `KeyboardEnabledStateInspector` `isKeyboardCurrentlyActive` is renamed to `isKeyboardActive`.
+* `KeyboardContext` has redesigned initializers that set fewer properties.
+* `KeyboardContext` `screenOrientation` is replaced by `interfaceOrientation`.
+* `KeyboardType` font size is deprecated and moved to `StandardKeyboardAppearance`.
+* `SpaceCursorDragGestureHandler` `context` is renamed to `keyboardContext`.
+* `StandardAutocompleteSuggestion` has deprecated the initializer with an implicit text name.
+* `StandardCalloutActionProvider` `context` is renamed to `keyboardContext`.
+* `StandardKeyboardActionHandler` `changeKeyboardTypeAction` is in-comment deprecated.
+* `StandardKeyboardAppearance` `context` is renamed to `keyboardContext`.
+* `StandardKeyboardBehavior` `context` is renamed to `keyboardContext`.
+* `StandardSystemKeyboardButtonContent` is deprecated.
+* `StaticKeyboardBehavior` `context` is renamed to `keyboardContext`.
+* `SystemKeyboardActionButton` `context` is renamed to `keyboardContext`.
+* `SystemKeyboardActionButtonContent` `context` is renamed to `keyboardContext`.
+* `SystemKeyboardButtonRowItem` `context` is renamed to `keyboardContext`.
+* `SystemKeyboardButtonText` legacy initializer is deprecated. 
+* `SystemKeyboardSpaceButton` is deprecated.
+* `SystemKeyboardSpaceButtonContent` is renamed to `SystemKeyboardSpaceContent`.
+* `SystemKeyboardSpaceContent` init with a `spaceText` parameter is deprecated.
+* `UIScreen` device extensions are deprecated.
+* `View+Frame` is deprecated.
+* `View.actionCallout` is renamed to `View.keyboardActionCallout`.
+* `View.calloutShadow` is renamed to `View.keyboardCalloutShadow`.
+* `View.inputCallout` is renamed to `View.keyboardInputCallout`. 
+
+### 💥 Breaking changes
+
+* `KeyboardContext` `screen` is deprecated.
+* KeyboardKit Pro labels now use a style instead of init parameters.
+
+
+
+## 6.8.1  
+
+### 🐛 Bug fixes
+
+* This release fixes an invalid localization for the English return key.
+
+
+
+## 6.8
+
+This release adds 5 new locales, which brings the number of supported locales to 60!
+
+To get locales like Armenian to work, this version starts to break up the layout engine in smaller parts, to make it easier to manage as the number of locales grow. The iPhone and iPad layout providers will be converted to base classes and inherited by locale-specific providers.
+
+Note that a bunch of `StandardKeyboardLayoutProvider` things are deprecated in comments only, since the library still has to use them. These will be removed in the next major update.  
+
+### 🌐 New locales
+
+* 🇦🇲 Armenian
+* 🏳️ Cherokee
+* 🇮🇩 Indonesian
+* 🇲🇾 Malay
+* 🇺🇿 Uzbek
+
+### 👑 KeyboardKit Pro
+
+* `FullDocumentContextConfiguration` now uses a longer, default delay. 
+* `FullDocumentContextResult` now contains more information. 
+* `ProKeyboardLayoutProvider` is a new base class for pro layout providers.
+* `ProKeyboardLayoutProvider.Armenian` is the first, new layout provider that uses this new architecture.
+* `ProKeyboardLayoutProvider.German` and all German variants now correctly replaces `.return` with `.newLine`.
+* `UITextDocumentProxy` `fullDocumentContext` has been adjusted to behave better.
+* `UITextDocumentProxy` `fullDocumentContext` will now throw an error if it's called while a read operation is in progress.
+
+### ✨ New features
+
+* `EnglishKeyboardLayoutProvider` is a new, open class that provides English keyboard layouts.
+* `InputSetProviderBased` is a new protocol that is used to keep track of types that rely on an input set provider.
+* `KeyboardActions` has new character margin actions properties.
+* `KeyboardContext` has a new `keyboardDictationReplacement` property.
+* `KeyboardEnabledLabel` is a new view that can be used to show enabled/active state.
+* `KKL10n` has a new `join` case, although localiations are missing for most locales.
+* `StandardInputSetProvider` `keyboardContext` is now public.
+* `StandardKeyboardLayoutProvider` can now take a collection of localized layout providers.
+
+### 💡 Behavior changes
+
+* `SystemKeyboard` now applies locale as identifier to force update its rows.
+* `StandardKeyboardActionHandler` now ignores autocomplete suggestions when the cursor is at the beginning of a word.
+* `SystemKeyboardLayoutProvider` now uses the `KeyboardContext` `keyboardDictationReplacement` instead of the injected value.
+* `SystemKeyboardLayoutProvider` will for now set the `KeyboardContext` `keyboardDictationReplacement`, if one is provided, to not cause any old code to break.
+
+### 🗑 Deprecations
+
+* `KeyboardLayoutProvider` dictation replacement initializers and properties are deprecated.
+* `StandardCalloutActionProvider` `providerDictionary` has been renamed to `localizedProviders`.
+* `StandardInputSetProvider` `providerDictionary` has been renamed to `localizedProviders`.
+* `KeyboardInputTextComponent` has been renamed to `KeyboardInputComponent`.
+* `StandardKeyboardLayoutProvider` `inputSetProvider` is in-comment deprecated.
+* `StandardKeyboardLayoutProvider` `iPhoneProvider` is in-comment deprecated.
+* `StandardKeyboardLayoutProvider` `iPadProvider` is in-comment deprecated.
+* `StandardKeyboardLayoutProvider` leading and trailing margin action functions are deprecated.
+* `SystemKeyboardActionButtonContent` now applies a padding and minimum scale factor to text views. 
+
+### 💥 Breaking changes
+
+* `StandardKeyboardLayoutProvider` now requires a keyboard context.
+* `KeyboardAction` no longer implements `KeyboardRowItem`.
 
 
 
@@ -26,7 +199,7 @@ Some things that are planned for the 7.0 release:
 
 * `ProCalloutActionProvider` has a new `all()` function.
 * `ProInputSetProvider` has a new `all()` function.
-* `English` and `EnglishUS` now also shows emoji skin tone variants.
+* `English` and `US English` callout action providers now also show emoji skin tone variants.
 
 
 

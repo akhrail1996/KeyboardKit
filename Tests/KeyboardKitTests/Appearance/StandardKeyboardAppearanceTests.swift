@@ -21,7 +21,7 @@ class StandardKeyboardAppearanceTests: XCTestCase {
 
     override func setUp() {
         context = KeyboardContext()
-        appearance = StandardKeyboardAppearance(context: context)
+        appearance = StandardKeyboardAppearance(keyboardContext: context)
         styles = KeyboardAction.testActions.map {
             (action: $0, style: appearance.buttonStyle(for: $0, isPressed: false))
         }
@@ -75,8 +75,10 @@ class StandardKeyboardAppearanceTests: XCTestCase {
     func testButtonStyleBackgroundColorIsStandardForAllExceptPrimaryAction() {
         styles.forEach {
             let result = $0.style.backgroundColor
-            let expected: Color = $0.action.isPrimaryAction ?
-                .blue : $0.action.buttonBackgroundColor(for: context)
+            let isPrimary = $0.action.isPrimaryAction
+            let isSystem = $0.action.isSystemAction
+            let expectedBlue = isPrimary && !isSystem
+            let expected: Color = expectedBlue ? .blue : $0.action.buttonBackgroundColor(for: context)
             let equalOpaque = result == expected.opacity(1.00)
             let equalTransparent = result == expected.opacity(0.95)
             XCTAssertTrue(equalOpaque || equalTransparent)
@@ -109,8 +111,10 @@ class StandardKeyboardAppearanceTests: XCTestCase {
     }
 
     func testButtonFontSizeIsExplicitlyDefinedForSomeActions() {
+        XCTAssertEqual(buttonFontSize(for: .keyboardType(.alphabetic(.lowercased))), 15)
         XCTAssertEqual(buttonFontSize(for: .keyboardType(.numeric)), 16)
-        XCTAssertEqual(buttonFontSize(for: .return), 16)
+        XCTAssertEqual(buttonFontSize(for: .keyboardType(.symbolic)), 14)
+        XCTAssertEqual(buttonFontSize(for: .primary(.return)), 16)
         XCTAssertEqual(buttonFontSize(for: .space), 16)
     }
 
@@ -118,7 +122,7 @@ class StandardKeyboardAppearanceTests: XCTestCase {
         XCTAssertEqual(buttonFontSize(for: .character("a")), 26)
         XCTAssertEqual(buttonFontSize(for: .character("A")), 23)
         XCTAssertEqual(buttonFontSize(for: .character("!")), 23)
-        XCTAssertEqual(buttonFontSize(for: .return), 16)
+        XCTAssertEqual(buttonFontSize(for: .primary(.return)), 16)
         XCTAssertEqual(buttonFontSize(for: .space), 16)
     }
 
@@ -141,7 +145,10 @@ class StandardKeyboardAppearanceTests: XCTestCase {
     func testButtonStyleForegroundColorIsStandardForAllActionsExceptPrimaryActions() {
         styles.forEach {
             let result = $0.style.foregroundColor
-            let expected: Color = $0.action.isPrimaryAction ? .white : $0.action.buttonForegroundColor(for: context)
+            let isPrimary = $0.action.isPrimaryAction
+            let isSystem = $0.action.isSystemAction
+            let expectedWhite = isPrimary && !isSystem
+            let expected: Color = expectedWhite ? .white : $0.action.buttonForegroundColor(for: context)
             XCTAssertEqual(result, expected)
         }
     }

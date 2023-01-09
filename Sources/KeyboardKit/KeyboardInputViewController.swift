@@ -57,17 +57,10 @@ open class KeyboardInputViewController: UIInputViewController {
     /**
      Setup KeyboardKit with a SwiftUI view.
 
-     Calling this function will remove all subviews from the
-     view controller and add the provided view in such a way
-     that the extension will resize to fit the provided view.
-     It also injects the input controller observable objects
-     as `@EnvironmentObject` into the view hierarchy, to let
-     any view in the view hieararchy access them easily.
-
-     For now views MUST add an `@EnvironmentObject` property
-     for the `KeyboardContext` to update correctly when this
-     context changes. This should not be needed, but for now
-     it is. Any help to figure out why would be amazing.
+     This function removes all views from the controller and
+     adds the provided view in a way that the extension will
+     resize to fit it. It also injects observable objects as
+     `@EnvironmentObject` into the view hierarchy.
      */
     open func setup<Content: View>(with view: Content) {
         self.view.subviews.forEach { $0.removeFromSuperview() }
@@ -191,8 +184,8 @@ open class KeyboardInputViewController: UIInputViewController {
      ``StandardCalloutActionProvider`` is used by default.
      */
     public lazy var calloutActionProvider: CalloutActionProvider = StandardCalloutActionProvider(
-        context: keyboardContext) {
-        didSet { refreshProperties() }
+        keyboardContext: keyboardContext) {
+        didSet { refreshProperties() }  // TODO: Remove
     }
     
     /**
@@ -203,7 +196,8 @@ open class KeyboardInputViewController: UIInputViewController {
      ``StandardInputSetProvider`` is used by default.
      */
     public lazy var inputSetProvider: InputSetProvider = StandardInputSetProvider(
-        context: keyboardContext) {
+        keyboardContext: keyboardContext
+    ) {
         didSet { refreshProperties() }
     }
     
@@ -227,7 +221,7 @@ open class KeyboardInputViewController: UIInputViewController {
      ``StandardKeyboardAppearance`` is used by default.
      */
     public lazy var keyboardAppearance: KeyboardAppearance = StandardKeyboardAppearance(
-        context: keyboardContext)
+        keyboardContext: keyboardContext)
 
     /**
      This behavior determines how the keyboard should behave
@@ -237,7 +231,7 @@ open class KeyboardInputViewController: UIInputViewController {
      ``StandardKeyboardBehavior`` is used by default.
      */
     public lazy var keyboardBehavior: KeyboardBehavior = StandardKeyboardBehavior(
-        context: keyboardContext)
+        keyboardContext: keyboardContext)
     
     /**
      This feedback handler is used to setup audio and haptic
@@ -263,6 +257,7 @@ open class KeyboardInputViewController: UIInputViewController {
      ``StandardKeyboardLayoutProvider`` is used by default.
      */
     public lazy var keyboardLayoutProvider: KeyboardLayoutProvider = StandardKeyboardLayoutProvider(
+        keyboardContext: keyboardContext,
         inputSetProvider: inputSetProvider)
     
     

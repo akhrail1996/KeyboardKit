@@ -28,7 +28,8 @@ open class iPhoneKeyboardLayoutProvider: SystemKeyboardLayoutProvider {
      */
     open override func actions(
         for inputs: InputSetRows,
-        context: KeyboardContext) -> KeyboardActionRows {
+        context: KeyboardContext
+    ) -> KeyboardActionRows {
         let actions = super.actions(for: inputs, context: context)
         guard isExpectedPhoneInputActions(actions) else { return actions }
         let upper = actions[0]
@@ -50,10 +51,11 @@ open class iPhoneKeyboardLayoutProvider: SystemKeyboardLayoutProvider {
         for action: KeyboardAction,
         row: Int,
         index: Int,
-        context: KeyboardContext) -> KeyboardLayoutItemWidth {
+        context: KeyboardContext
+    ) -> KeyboardLayoutItemWidth {
         if action.isPrimaryAction { return bottomPrimaryButtonWidth(for: context) }
         switch action {
-        case dictationReplacement: return bottomSystemButtonWidth(for: context)
+        case context.keyboardDictationReplacement: return bottomSystemButtonWidth(for: context)
         case .character:
             if context.isAlphabetic(.greek) { return .percentage(0.1) }
             return isLastNumericInputRow(row, for: context) ? lastSymbolicInputWidth(for: context) : .input
@@ -73,16 +75,28 @@ open class iPhoneKeyboardLayoutProvider: SystemKeyboardLayoutProvider {
     /**
      Get the actions of the bottommost space key row.
      */
-    open func bottomActions(for context: KeyboardContext) -> KeyboardActions {
+    open func bottomActions(
+        for context: KeyboardContext
+    ) -> KeyboardActions {
         var result = KeyboardActions()
         let needsInputSwitch = context.needsInputModeSwitchKey
         let needsDictation = context.needsInputModeSwitchKey
         if let action = keyboardSwitchActionForBottomRow(for: context) { result.append(action) }
         if needsInputSwitch { result.append(.nextKeyboard) }
         if !needsInputSwitch { result.append(.keyboardType(.emojis)) }
+        let dictationReplacement = context.keyboardDictationReplacement
         if isPortrait(context), needsDictation, let action = dictationReplacement { result.append(action) }
         result.append(.space)
         if context.isAlphabetic(.persian) { result.append(.character(.zeroWidthSpace)) }
+        #if os(iOS) || os(tvOS)
+        if context.textDocumentProxy.keyboardType == .emailAddress {
+            result.append(.character("@"))
+            result.append(.character("."))
+        }
+        if context.textDocumentProxy.returnKeyType == .go {
+            result.append(.character("."))
+        }
+        #endif
         result.append(keyboardReturnAction(for: context))
         if !isPortrait(context), needsDictation, let action = dictationReplacement { result.append(action) }
         return result
@@ -91,9 +105,12 @@ open class iPhoneKeyboardLayoutProvider: SystemKeyboardLayoutProvider {
     /**
      Get leading actions to add to the lower inputs row.
      */
-    open func lowerLeadingActions(for actions: KeyboardActionRows, context: KeyboardContext) -> KeyboardActions {
+    open func lowerLeadingActions(
+        for actions: KeyboardActionRows,
+        context: KeyboardContext
+    ) -> KeyboardActions {
         guard isExpectedPhoneInputActions(actions) else { return [] }
-        let margin = leadingMarginAction(for: actions[2])
+        let margin = actions[2].leadingCharacterMarginAction
         if context.isAlphabetic(.hebrew) { return [margin] }
         guard let switcher = keyboardSwitchActionForBottomInputRow(for: context) else { return [] }
         if context.isAlphabetic(.arabic) { return [] }
@@ -111,9 +128,12 @@ open class iPhoneKeyboardLayoutProvider: SystemKeyboardLayoutProvider {
     /**
      Get trailing actions to add to the lower inputs row.
      */
-    open func lowerTrailingActions(for actions: KeyboardActionRows, context: KeyboardContext) -> KeyboardActions {
+    open func lowerTrailingActions(
+        for actions: KeyboardActionRows,
+        context: KeyboardContext
+    ) -> KeyboardActions {
         guard isExpectedPhoneInputActions(actions) else { return [] }
-        let margin = trailingMarginAction(for: actions[2])
+        let margin = actions[2].trailingCharacterMarginAction
         if context.isAlphabetic(.hebrew) { return [margin] }
         if context.isAlphabetic(.arabic) { return [margin, .backspace] }
         if context.isAlphabetic(.kurdish_sorani_arabic) { return [.backspace] }
@@ -129,26 +149,33 @@ open class iPhoneKeyboardLayoutProvider: SystemKeyboardLayoutProvider {
     /**
      Get leading actions to add to the middle inputs row.
      */
-    open func middleLeadingActions(for actions: KeyboardActionRows, context: KeyboardContext) -> KeyboardActions {
+    open func middleLeadingActions(
+        for actions: KeyboardActionRows,
+        context: KeyboardContext
+    ) -> KeyboardActions {
         guard shouldAddMiddleMarginActions(for: actions, context: context) else { return [] }
-        let margin = leadingMarginAction(for: actions[1])
-        return [margin]
+        return [actions[1].leadingCharacterMarginAction]
     }
 
     /**
      Get trailing actions to add to the middle inputs row.
      */
-    open func middleTrailingActions(for actions: KeyboardActionRows, context: KeyboardContext) -> KeyboardActions {
+    open func middleTrailingActions(
+        for actions: KeyboardActionRows,
+        context: KeyboardContext
+    ) -> KeyboardActions {
         guard shouldAddMiddleMarginActions(for: actions, context: context) else { return [] }
-        let margin = trailingMarginAction(for: actions[1])
-        return [margin]
+        return [actions[1].trailingCharacterMarginAction]
     }
 
     /**
      Get leading actions to add to the upper inputs row.
      */
-    open func upperLeadingActions(for actions: KeyboardActionRows, context: KeyboardContext) -> KeyboardActions {
-        let margin = leadingMarginAction(for: actions[0])
+    open func upperLeadingActions(
+        for actions: KeyboardActionRows,
+        context: KeyboardContext
+    ) -> KeyboardActions {
+        let margin = actions[0].leadingCharacterMarginAction
         if context.isAlphabetic(.hebrew) { return [margin] }
         guard shouldAddUpperMarginActions(for: actions, context: context) else { return [] }
         return [margin]
@@ -157,8 +184,11 @@ open class iPhoneKeyboardLayoutProvider: SystemKeyboardLayoutProvider {
     /**
      Get trailing actions to add to the upper inputs row.
      */
-    open func upperTrailingActions(for actions: KeyboardActionRows, context: KeyboardContext) -> KeyboardActions {
-        let margin = trailingMarginAction(for: actions[0])
+    open func upperTrailingActions(
+        for actions: KeyboardActionRows,
+        context: KeyboardContext
+    ) -> KeyboardActions {
+        let margin = actions[0].trailingCharacterMarginAction
         if context.isAlphabetic(.hebrew) { return [margin, .backspace] }
         guard shouldAddUpperMarginActions(for: actions, context: context) else { return [] }
         return [margin]
@@ -172,11 +202,7 @@ private extension iPhoneKeyboardLayoutProvider {
     }
 
     func isPortrait(_ context: KeyboardContext) -> Bool {
-        #if os(iOS)
-        return context.screenOrientation.isPortrait
-        #else
-        return false
-        #endif
+        context.interfaceOrientation.isPortrait
     }
 
     /**

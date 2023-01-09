@@ -10,9 +10,8 @@ import CoreGraphics
 import SwiftUI
 
 /**
- This class can be inherited by any keyboard layout provider
- that needs basic functionality for creating system keyboard
- layouts that depend on system-specific rules.
+ This is a base class for any keyboard layout providers that
+ need basic functionality for system keyboard layouts.
 
  The class is used by the ``iPadKeyboardLayoutProvider`` and
  and the ``iPhoneKeyboardLayoutProvider``, since they aim to
@@ -33,21 +32,10 @@ open class SystemKeyboardLayoutProvider: KeyboardLayoutProvider {
      
      - Parameters:
        - inputSetProvider: The input set provider to use.
-       - dictationReplacement: An optional dictation replacement action.
      */
-    public init(
-        inputSetProvider: InputSetProvider,
-        dictationReplacement: KeyboardAction? = nil
-    ) {
+    public init(inputSetProvider: InputSetProvider) {
         self.inputSetProvider = inputSetProvider
-        self.dictationReplacement = dictationReplacement
     }
-
-    
-    /**
-     An optional dictation replacement action.
-     */
-    public let dictationReplacement: KeyboardAction?
     
     /**
      The input set provider to use.
@@ -64,10 +52,9 @@ open class SystemKeyboardLayoutProvider: KeyboardLayoutProvider {
         let items = self.items(for: actions, context: context)
         return KeyboardLayout(itemRows: items)
     }
-    
+
     /**
-     Register a new input set provider. This will affect the
-     keyboard layout that is provided by this class.
+     Register a new input set provider.
      */
     open func register(inputSetProvider: InputSetProvider) {
         self.inputSetProvider = inputSetProvider
@@ -173,10 +160,10 @@ open class SystemKeyboardLayoutProvider: KeyboardLayoutProvider {
         case .done: return .primary(.done)
         case .go: return .primary(.go)
         case .search: return .primary(.search)
-        default: return .return
+        default: return .primary(.return)
         }
         #else
-        return .return
+        return .primary(.return)
         #endif
     }
     

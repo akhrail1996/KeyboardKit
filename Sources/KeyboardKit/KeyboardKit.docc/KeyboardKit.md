@@ -9,7 +9,7 @@ KeyboardKit helps you build custom keyboards with Swift and SwiftUI.
 
 KeyboardKit helps you build custom keyboards with Swift and SwiftUI. It extends Apple's native keyboard extension APIs and provides you with more functionality than is otherwise available. 
 
-KeyboardKit also provides you with utilities that lets you mimic native iOS keyboards. You can use ``SystemKeyboard`` and style it a little (or a lot) or use completely custom views or designs.
+KeyboardKit also provides you with utilities that lets you mimic native iOS keyboards. You can use ``SystemKeyboard`` and style it as much as you want and customize it with completely custom views or designs.
 
 
 
@@ -35,7 +35,7 @@ or with CocoaPods:
 pod KeyboardKit
 ```
 
-You can add the library to the main app, the keyboard extension and any other targets that need it.
+You can add the library to the main app, the keyboard extension and any targets that need it.
 
 
 
@@ -47,19 +47,21 @@ Note that extensions to native types are not included in this documentation. Fut
 
 
 
-## 🇸🇪 Localization
+## Localization
 
-KeyboardKit is localized in 50+ keyboard-specific locales:
+KeyboardKit is localized in 60 keyboard-specific locales:
 
-🇺🇸 🇦🇱 🇦🇪 🇧🇾 🇧🇬 🇦🇩 🇭🇷 🇨🇿 🇩🇰 🇳🇱 <br />
+🇦🇱 🇦🇪 🇦🇲 🇧🇾 🇧🇬 🇦🇩 🏳️ 🇭🇷 🇨🇿 🇩🇰 <br />
 
-🇧🇪 🇬🇧 🇪🇪 🇫🇴 🇵🇭 🇫🇮 🇫🇷 🇨🇭 🇬🇪 🇩🇪 <br />
+🇳🇱 🇧🇪 🇺🇸 🇬🇧 🇺🇸 🇪🇪 🇫🇴 🇵🇭 🇫🇮 🇫🇷 <br />
 
-🇦🇹 🇬🇷 🇮🇱 🇭🇺 🇮🇸 🇮🇪 🇮🇹 🇹🇯 🇱🇻 🇱🇹 <br />
+🇧🇪 🇨🇭 🇬🇪 🇩🇪 🇦🇹 🇨🇭 🇬🇷 🇺🇸 🇮🇱 🇭🇺 <br />
 
-🇲🇰 🇲🇹 🇲🇳 🇳🇴 🇮🇷 🇵🇱 🇵🇹 🇧🇷 🇷🇴 🇷🇺 <br />
+🇮🇸 🇮🇩 🇮🇪 🇮🇹 🇹🇯 🇹🇯 🇹🇯 🇱🇻 🇱🇹 🇲🇰 <br />
 
-🇷🇸 🇸🇰 🇸🇮 🇪🇸 🇰🇪 🇸🇪 🇹🇷 🇺🇦 🇺🇸 🇧🇪 <br />
+🇲🇾 🇲🇹 🇲🇳 🇳🇴 🇮🇷 🇵🇱 🇵🇹 🇧🇷 🇷🇴 🇷🇺 <br />
+
+🇷🇸 🇷🇸 🇸🇰 🇸🇮 🇪🇸 🇰🇪 🇸🇪 🇹🇷 🇺🇦 🇺🇿 <br />
 
 
 
@@ -74,17 +76,17 @@ KeyboardKit is available under the MIT license.
 ### Articles
 
 - <doc:Getting-Started>
-- <doc:Understanding-Actions>
-- <doc:Understanding-Appearances>
-- <doc:Understanding-Autocomplete>
-- <doc:Understanding-Emojis>
-- <doc:Understanding-Feedback>
-- <doc:Understanding-Input-Sets>
-- <doc:Understanding-Layout>
-- <doc:Understanding-Localization>
-- <doc:Understanding-Previews>
-- <doc:Understanding-Proxy-Extensions>
-- <doc:Understanding-Text-Routing>
+- <doc:Actions>
+- <doc:Appearance>
+- <doc:Autocomplete>
+- <doc:Emojis>
+- <doc:Feedback>
+- <doc:Input>
+- <doc:Layout>
+- <doc:Localization>
+- <doc:Previews>
+- <doc:Proxy-Extensions>
+- <doc:Text-Routing>
 
 ### Keyboard
 
@@ -107,6 +109,7 @@ KeyboardKit is available under the MIT license.
 ### Appearance
 
 - ``KeyboardAppearance``
+- ``KeyboardAppearanceViewModifier``
 - ``StandardKeyboardAppearance``
 
 ### Autocomplete
@@ -158,6 +161,7 @@ KeyboardKit is available under the MIT license.
 - ``BaseCalloutActionProvider``
 - ``EnglishCalloutActionProvider``
 - ``LocalizedCalloutActionProvider``
+- ``DisabledCalloutActionProvider``
 
 ### Casing
 
@@ -172,6 +176,7 @@ KeyboardKit is available under the MIT license.
 ### Device
 
 - ``DeviceType``
+- ``InterfaceOrientation``
 
 ### Emojis
 
@@ -234,6 +239,7 @@ KeyboardKit is available under the MIT license.
 - ``InputSet``
 - ``InputSetItem``
 - ``InputSetProvider``
+- ``InputSetProviderBased``
 - ``InputSetRow``
 - ``InputSetRows``
 - ``LocalizedInputSetProvider``
@@ -255,16 +261,18 @@ KeyboardKit is available under the MIT license.
 - ``KeyboardLayoutItemRows``
 - ``KeyboardLayoutItemSize``
 - ``KeyboardLayoutItemWidth``
+- ``KeyboardLayoutProvider``
+- ``KeyboardLayoutProviderProxy``
 - ``KeyboardRowItem``
 
-### Layout Providers
-
-- ``KeyboardLayoutProvider``
 - ``StandardKeyboardLayoutProvider``
 - ``iPadKeyboardLayoutProvider``
 - ``iPhoneKeyboardLayoutProvider``
+- ``LocalizedKeyboardLayoutProvider``
 - ``StaticKeyboardLayoutProvider``
 - ``SystemKeyboardLayoutProvider``
+
+- ``EnglishKeyboardLayoutProvider``
 
 ### Locale
 
@@ -292,7 +300,13 @@ KeyboardKit is available under the MIT license.
 
 - ``TextInputProxy``
 
-### SystemKeyboard
+### Styles
+
+- ``KeyboardButtonStyle``
+- ``KeyboardButtonBorderStyle``
+- ``KeyboardButtonShadowStyle``
+
+### System Keyboard
 
 - ``SystemKeyboard``
 - ``SystemKeyboardActionButton``
@@ -302,24 +316,13 @@ KeyboardKit is available under the MIT license.
 - ``SystemKeyboardButtonRowItem``
 - ``SystemKeyboardButtonShadow``
 - ``SystemKeyboardButtonText``
-- ``SystemKeyboardSpaceButton``
-- ``SystemKeyboardSpaceButtonContent``
-- ``StandardSystemKeyboardButtonContent``
-- ``StandardSystemKeyboardButtonView``
+- ``SystemKeyboardSpaceContent``
 
-### Views - Buttons
+### Views
 
-- ``KeyboardButtonStyle``
-- ``KeyboardButtonBorderStyle``
-- ``KeyboardButtonShadowStyle``
-- ``NextKeyboardButton``
-
-### Views - Input
-
-- ``KeyboardInputTextComponent``
+- ``KeyboardEnabledLabel``
+- ``KeyboardGrid``
+- ``KeyboardInputComponent``
 - ``KeyboardTextField``
 - ``KeyboardTextView``
-
-### Views - Layout
-
-- ``KeyboardGrid``
+- ``NextKeyboardButton``
