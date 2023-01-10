@@ -160,7 +160,7 @@ public extension KeyboardLayoutConfiguration {
     static let standardPhonePortrait = KeyboardLayoutConfiguration(
         buttonCornerRadius: 4,
         buttonInsets: .horizontal(3, vertical: 6),
-        rowHeight: 50)
+        rowHeight: 54)
     
     /**
      The standard config for an iPhone Pro Max in landscape.
